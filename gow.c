@@ -289,24 +289,18 @@ int main(int argc, char** argv)
 		printf("installing Go %s (in ~/.gow/)...\n", version);
 		fflush(stdout);
 
-		printf("MAKEDIRS, for '%s' >>>\n", directory);
 		int error = makedirs(directory, 0755);
 		if (error != 0 && errno != EEXIST) goto failure;
-		printf("MAKEDIRS <<<\n");
 
 		char download[PATH_MAX];
 		snprintf(download, PATH_MAX, "%sdownload.%s",
 				directory, system_format);
 		if (system_windows) mungentpath(download);
 		
-		printf("DOWNLOAD >>>\n");
 		if (!execute(ERROR_DOWNLOAD, FAILURE_DOWNLOAD, COMMAND_DOWNLOAD,
 				path, download)) goto failure;
-		printf("DOWNLOAD <<<\n");
-		printf("EXTRACT >>>\n");
 		if (!execute(ERROR_EXTRACT, FAILURE_EXTRACT, COMMAND_EXTRACT,
 				download, directory_mungent)) goto failure;
-		printf("EXTRACT <<<\n");
 		if (remove(download) != 0) goto failure;
 
 		printf("\x1b[u");
