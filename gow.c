@@ -246,20 +246,8 @@ static bool execute(char* error, char* failure, char* command, ...)
 	return true;
 }
 
-/// Calls `pledge` from Cosmopolitan `libc`, which delegates to pledge
-/// on OpenBSD, seccomp on Linux, and does nothing on other platforms.
-static bool lockdown()
-{
-	if (pledge(PLEDGES, PLEDGES) == -1) {
-		perror("pledge");
-		return false;
-	}
-	return true;
-}
-
 int main(int argc, char** argv)
 {
-	if (!lockdown()) goto failure;
 	if (!detect_system()) goto failure;
 	if (!detect_dependencies()) goto failure;
 
